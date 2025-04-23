@@ -21,12 +21,10 @@ public class VacationCalculatorService {
     }
 
     public BigDecimal calculate(VacationRequest request) {
-        // Validate averageSalary
         if (request.getAverageSalary() == null || request.getAverageSalary().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Average salary must be greater than 0");
         }
 
-        // Case 1: vacationDays is provided
         if (request.getVacationDays() != null) {
             if (request.getVacationDays() <= 0) {
                 throw new IllegalArgumentException("Vacation days must be greater than 0");
@@ -34,15 +32,12 @@ public class VacationCalculatorService {
             return calculateVacationPay(request.getAverageSalary(), request.getVacationDays());
         }
 
-        // Case 2: start and end dates are provided
         if (request.getStartDate() != null && request.getEndDate() != null) {
             if (request.getEndDate().isBefore(request.getStartDate())) {
                 throw new IllegalArgumentException("End date must not be before start date");
             }
             return calculateVacationPayWithDates(request.getAverageSalary(), request.getStartDate(), request.getEndDate());
         }
-
-        // If neither vacationDays nor dates are provided
         throw new IllegalArgumentException("Provide either vacationDays or startDate and endDate");
     }
 
